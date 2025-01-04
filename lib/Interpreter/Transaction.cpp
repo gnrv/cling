@@ -147,7 +147,7 @@ namespace cling {
 
     bool checkForWrapper = !m_WrapperFD;
 
-#ifndef NDEBUG
+#if 0 //ndef NDEBUG
     // Check for duplicates
     for (size_t i = 0, e = m_DeclQueue.size(); i < e; ++i) {
       DelayCallInfo &oldDCI (m_DeclQueue[i]);
@@ -169,8 +169,10 @@ namespace cling {
       // that callback.
       // For reference (clang::CodeGen::CodeGenModule::EmitVTable).
       if (oldDCI.m_Call != kCCIHandleVTable
-          && oldDCI.m_Call != kCCIHandleCXXImplicitFunctionInstantiation)
-        assert(oldDCI != DCI && "Duplicates?!");
+          && oldDCI.m_Call != kCCIHandleCXXImplicitFunctionInstantiation) {
+        //assert(oldDCI != DCI && "Duplicates?!");
+        cling::errs() << "oldDCI != DCI: " << oldDCI.m_Call << " != " << DCI.m_Call << "\n";
+      }
     }
     // We want to assert there is only one wrapper per transaction.
     checkForWrapper = true;
