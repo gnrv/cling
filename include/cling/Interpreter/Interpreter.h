@@ -613,6 +613,7 @@ namespace cling {
     ///\returns Whether the operation was fully successful.
     ///
     CompilationResult evaluate(const std::string& input, Value& V);
+    CompilationResult reevaluate(Transaction *T, Value* V = nullptr);
 
     ///\brief Compiles input line, which contains only expressions and prints
     /// out the result of its execution.

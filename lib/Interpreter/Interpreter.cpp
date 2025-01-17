@@ -1376,7 +1376,7 @@ namespace cling {
   Interpreter::EvaluateInternal(const std::string& input,
                                 CompilationOptions CO,
                                 Value* V, /* = 0 */
-                                Transaction** /* T = 0 */,
+                                Transaction** T /* = 0 */,
                                 size_t wrapPoint /* = 0*/) {
     StateDebuggerRAII stateDebugger(this);
 
@@ -1412,9 +1412,19 @@ namespace cling {
       // Empty transactions are good, too!
       if (V)
         *V = Value();
+      if (T)
+        *T = nullptr;
       return kSuccess;
     }
 
+    if (T)
+      *T = lastT;
+
+    return reevaluate(lastT, V);
+  }
+
+  Interpreter::CompilationResult
+  Interpreter::reevaluate(Transaction *lastT, Value *V) {
     Value resultV;
     if (!V)
       V = &resultV;
